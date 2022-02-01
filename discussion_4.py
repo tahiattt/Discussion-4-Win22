@@ -43,7 +43,8 @@ class Warehouse:
 		max_price_item = self.items[0]
 		for item in self.items:
 			if item.price > max_price_item.price:
-				return max_price_item
+				max_price_item = item
+		return max_price_item
 
 	# Checks if item is in item list. If it is print "Item already in warehouse"
 	# If item isn't in the item list then print "Adding item" and add item to the warehouse
@@ -90,12 +91,34 @@ class TestAllMethods(unittest.TestCase):
 
 	## Check to see whether you can add an item to the warehouse
 	def test_add_item(self):
-		pass
+		w1 = Warehouse()
+		self.assertEqual(len(w1.items),0)
+
+		w1.add_item(self.item1)
+		self.assertEqual(len(w1.items),1)
+		self.assertEqual(w1.items[0], self.item1)
+
+		w1.add_item(self.item3)
+		w1.add_item(self.item5)
+		self.assertEqual(len(w1.items),3)
+		self.assertEqual(w1.items[2], self.item5)
+
+
 
 
 	# Check to see whether the warehouse correctly return the item with the highest price
 	def test_warehouse_max_price(self):
-		pass
+		w2 = Warehouse()
+		w2.add_item(self.item4)
+		self.assertEqual((w2.get_max_price()), self.item4)
+
+		w2.add_item(self.item3)
+		w2.add_item(self.item5)
+		self.assertEqual((w2.get_max_price()), self.item5)
+
+		w2.add_item(self.item1)
+		w2.add_item(self.item2)
+		self.assertEqual((w2.get_max_price()), self.item1)
 
 	## Check to see whethercheck_warehouse_for_item works
 	def test_check_warehouse_for_item(self):
@@ -103,10 +126,12 @@ class TestAllMethods(unittest.TestCase):
 		w3.add_item(self.item3)
 
 		# Case 1: check when there the item isn't in the warehouse
-		
+		w3.check_warehouse_for_item(self.item2)
+		self.assertEqual(w3.items, [self.item3,self.item2])
 
 		# Case 2: Check when the item is in the warehouse already
-		pass
+		w3.check_warehouse_for_item(self.item3)
+		self.assertEqual(w3.items, [self.item3,self.item2])
 
 
 
